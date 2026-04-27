@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArkTI - Loading Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #111;
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 加载页面 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .terminal-text {
+            text-align: left;
+            width: 400px;
+            max-width: 90vw;
+        }
+
+        .terminal-line {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #888;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .terminal-line.active {
+            color: #00d2ff;
+        }
+
+        .terminal-line.active::after {
+            content: '_';
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        .progress-container {
+            width: 400px;
+            max-width: 90vw;
+            margin-top: 30px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .progress-bar-wrapper {
+            width: 100%;
+            height: 6px;
+            background-color: #222;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00d2ff 0%, #00ff88 100%);
+            transition: width 0.15s ease;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8));
+            animation: shimmer 0.5s ease infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .loading-percentage {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            color: #00d2ff;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+        }
+
+        .loading-status {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #ff6600;
+            letter-spacing: 2px;
+        }
+
+        /* Logo */
+        .logo {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .logo h1 {
+            font-size: 48px;
+            color: #00d2ff;
+            letter-spacing: 12px;
+            text-shadow: 0 0 30px rgba(0, 210, 255, 0.6);
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 4px;
+        }
+
+        /* 装饰线条 */
+        .corner-decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #333;
+        }
+
+        .corner-decoration.top-left {
+            top: 30px;
+            left: 30px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-decoration.top-right {
+            top: 30px;
+            right: 30px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-decoration.bottom-left {
+            bottom: 30px;
+            left: 30px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-decoration.bottom-right {
+            bottom: 30px;
+            right: 30px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* 扫描线效果 */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                transparent 50%,
+                rgba(0, 0, 0, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <div class="loading-overlay" id="loading-screen">
+        <div class="logo">
+            <h1>ArkTI</h1>
+            <p>Rhodes Island Psychological Assessment</p>
+        </div>
+
+        <div class="terminal-text" id="terminal">
+            <p class="terminal-line" data-delay="0">> System initialized</p>
+            <p class="terminal-line" data-delay="200">> Connecting to ZOOT network...</p>
+            <p class="terminal-line active" data-delay="400">> Loading assessment data</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>LOADING</span>
+                <span id="ark-percent">0%</span>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="ark-progress"></div>
+            </div>
+        </div>
+
+        <div class="loading-percentage" id="percent-display">0%</div>
+        <div class="loading-status" id="status-text">INITIALIZING...</div>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('ark-progress');
+        const percentText = document.getElementById('ark-percent');
+        const percentDisplay = document.getElementById('percent-display');
+        const statusText = document.getElementById('status-text');
+        const terminalLines = document.querySelectorAll('.terminal-line');
+        const loadingScreen = document.getElementById('loading-screen');
+
+        const statusMessages = [
+            'INITIALIZING...',
+            'LOADING NEURAL DATA...',
+            'CALIBRATING PARAMETERS...',
+            'SYNCHRONIZING RECORDS...',
+            'NEARLY READY...'
+        ];
+
+        let progress = 0;
+        let statusIndex = 0;
+
+        // 逐行显示终端文字
+        terminalLines.forEach((line, index) => {
+            setTimeout(() => {
+                line.style.opacity = '1';
+            }, index * 300);
+        });
+
+        // 模拟加载进度
+        const interval = setInterval(() => {
+            // 随机增加进度，非均匀分布更真实
+            const increment = Math.floor(Math.random() * 8) + 3;
+            progress = Math.min(progress + increment, 100);
+
+            // 更新进度条和百分比
+            progressBar.style.width = progress + '%';
+            percentText.textContent = progress + '%';
+            percentDisplay.textContent = progress + '%';
+
+            // 更新状态文字
+            const newStatusIndex = Math.floor(progress / 25);
+            if (newStatusIndex !== statusIndex && newStatusIndex < statusMessages.length) {
+                statusIndex = newStatusIndex;
+                statusText.textContent = statusMessages[statusIndex];
+            }
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                statusText.textContent = 'READY';
+                statusText.style.color = '#00ff88';
+
+                // 加载完成，淡出
+                setTimeout(() => {
+                    loadingScreen.style.transition = 'opacity 0.5s ease';
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 800);
+            }
+        }, 150);
+    </script>
+</body>
+</html>

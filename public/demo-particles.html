@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArkTI - Particles Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 粒子背景容器 */
+        #tsparticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* 内容区域 */
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 100px 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-size: 64px;
+            color: #00d2ff;
+            letter-spacing: 16px;
+            text-shadow: 0 0 40px rgba(0, 210, 255, 0.6);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+
+        /* 卡片组件 */
+        .card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            border-left: 3px solid #00d2ff;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 0);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(30, 30, 30, 0.9);
+            border-left-color: #ff6600;
+            transform: translateX(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 15px 15px 0;
+            border-color: transparent #00d2ff transparent transparent;
+            opacity: 0.3;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            color: #00d2ff;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            font-weight: normal;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.8;
+        }
+
+        /* 进度条展示 */
+        .demo-section {
+            margin-top: 60px;
+        }
+
+        .demo-section h3 {
+            font-size: 12px;
+            color: #ff6600;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .progress-demo {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 4px;
+            background: #222;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #00ff88);
+            width: 0%;
+            transition: width 1s ease;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        /* 扫描线效果 */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                transparent 50%,
+                rgba(0, 0, 0, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* 装饰边框 */
+        .border-frame {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid #222;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .border-frame::before,
+        .border-frame::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #00d2ff;
+        }
+
+        .border-frame::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .border-frame::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="border-frame"></div>
+
+    <div id="tsparticles"></div>
+
+    <div class="content">
+        <div class="header">
+            <h1>ArkTI</h1>
+            <p>Rhodes Island Psychological Assessment</p>
+        </div>
+
+        <div class="card">
+            <h2>// SYSTEM NOTICE</h2>
+            <p>本系统为罗德岛干员基准心理评估测试。测试结果将纳入干员人事档案，作为任务分配与团队协作的参考依据。请根据自身真实想法作答。</p>
+        </div>
+
+        <div class="card">
+            <h2>// ASSESSMENT OVERVIEW</h2>
+            <p>测试包含12道情景选择题，涵盖社交倾向、信息处理、决策模式、行动风格四个维度。评估约需5分钟完成。</p>
+        </div>
+
+        <div class="card">
+            <h2>// DATA SECURITY</h2>
+            <p>所有评估数据均受罗德岛信息安全协议保护。未经授权，任何外部人员均无法访问干员心理档案。</p>
+        </div>
+
+        <div class="demo-section">
+            <h3>Dimension Analysis Preview</h3>
+
+            <div class="progress-demo">
+                <div class="progress-label">
+                    <span>SOCIAL TENDENCY</span>
+                    <span>75%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="75"></div>
+                </div>
+            </div>
+
+            <div class="progress-demo">
+                <div class="progress-label">
+                    <span>INFORMATION PROCESSING</span>
+                    <span>60%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="60"></div>
+                </div>
+            </div>
+
+            <div class="progress-demo">
+                <div class="progress-label">
+                    <span>DECISION PATTERN</span>
+                    <span>85%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="85"></div>
+                </div>
+            </div>
+
+            <div class="progress-demo">
+                <div class="progress-label">
+                    <span>ACTION STYLE</span>
+                    <span>45%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="45"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化粒子效果
+        tsParticles.load("tsparticles", {
+            background: {
+                color: {
+                    value: "#0a0a0a"
+                }
+            },
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 1000
+                    }
+                },
+                color: {
+                    value: ["#00d2ff", "#ffffff", "#666666"]
+                },
+                links: {
+                    enable: true,
+                    distance: 120,
+                    color: "#333333",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 0.8,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    outModes: "out"
+                },
+                shape: {
+                    type: "circle"
+                },
+                size: {
+                    value: { min: 1, max: 3 }
+                },
+                opacity: {
+                    value: { min: 0.3, max: 0.8 },
+                    animation: {
+                        enable: true,
+                        speed: 0.5,
+                        minimumValue: 0.2,
+                        sync: false
+                    }
+                }
+            },
+            interactivity: {
+                events: {
+                    onHover: {
+                        enable: true,
+                        mode: "grab"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 150,
+                        links: {
+                            opacity: 0.6,
+                            color: "#00d2ff"
+                        }
+                    }
+                }
+            },
+            detectRetina: true
+        });
+
+        // 进度条动画
+        setTimeout(() => {
+            const fills = document.querySelectorAll('.progress-bar-fill');
+            fills.forEach(fill => {
+                fill.style.width = fill.dataset.width + '%';
+            });
+        }, 500);
+    </script>
+</body>
+</html>

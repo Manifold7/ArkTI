@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArkTI - 罗德岛干员基准心理评估</title>
+    <link rel="stylesheet" href="../src/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+</head>
+<body>
+    <!-- 粒子背景 -->
+    <div id="tsparticles"></div>
+
+    <!-- 扫描线效果 -->
+    <div class="scanline"></div>
+
+    <!-- 加载页面 -->
+    <div class="loading-overlay" id="loading-screen">
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+
+        <div class="logo">
+            <h1>ArkTI</h1>
+            <p>Rhodes Island Psychological Assessment</p>
+        </div>
+
+        <div class="terminal-text" id="terminal">
+            <p class="terminal-line" data-delay="0">> System initialized</p>
+            <p class="terminal-line" data-delay="200">> Connecting to ZOOT network...</p>
+            <p class="terminal-line active" data-delay="400">> Loading assessment data</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>LOADING</span>
+                <span id="ark-percent">0%</span>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="ark-progress"></div>
+            </div>
+        </div>
+
+        <div class="loading-percentage" id="percent-display">0%</div>
+        <div class="loading-status" id="status-text">INITIALIZING...</div>
+    </div>
+
+    <div class="container">
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <div class="header">
+                <h1>ArkTI</h1>
+                <h2>罗德岛干员基准心理评估</h2>
+            </div>
+            <div class="content">
+                <p class="intro">本测试是罗德岛干员标准心理评估流程的一部分。</p>
+                <p class="intro">测试结果将纳入干员人事档案，作为任务分配与团队协作的参考依据。</p>
+                <p class="intro">本测试共12道题，约需5分钟完成。请根据您的第一反应作答。</p>
+                <button id="start-btn" class="btn-primary">开始评估</button>
+            </div>
+        </div>
+
+        <!-- 测试页面 -->
+        <div id="test-page" class="page">
+            <div class="progress-bar">
+                <div id="progress" class="progress-fill"></div>
+            </div>
+            <div class="question-container">
+                <div class="question-number">问题 <span id="current-q">1</span> / 12</div>
+                <h3 id="question-text" class="question-text"></h3>
+                <div class="options">
+                    <button class="option-btn" data-choice="A">
+                        <span class="option-label">A</span>
+                        <span class="option-text" id="option-a"></span>
+                    </button>
+                    <button class="option-btn" data-choice="B">
+                        <span class="option-label">B</span>
+                        <span class="option-text" id="option-b"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <div class="header">
+                <h1>评估完成</h1>
+            </div>
+            <div class="result-container">
+                <div class="result-badge">
+                    <p class="result-label">基准心理类型</p>
+                    <h2 id="personality-code"></h2>
+                    <p id="type-title"></p>
+                </div>
+                <div class="character-info">
+                    <h3>匹配干员</h3>
+                    <a id="character-link" class="character-link" href="#" target="_blank">
+                        <img id="character-image" class="character-image" src="" alt="character portrait">
+                    </a>
+                    <p id="character-name" class="character-name"></p>
+                    <p id="character-quote" class="character-quote"></p>
+                </div>
+                <div class="dimensions">
+                    <h4>特质分析：</h4>
+                    <div class="dimension-list" id="dimension-details"></div>
+                </div>
+                <p class="result-note">本结果已归档至干员心理档案。建议定期复测以监测心理状态变化。</p>
+                <button id="restart-btn" class="btn-primary">重新评估</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/js/questions.js"></script>
+    <script src="../src/js/characters.js"></script>
+    <script src="../src/js/app.js"></script>
+</body>
+</html>
