@@ -163,10 +163,10 @@ const dimensionNames = {
     'P': '灵活型 - 随机应变'
 };
 
-// 维度类别名称
+// 维度类别名称 - 英文
 const dimensionCategories = {
-    'EI': '社交倾向',
-    'SN': '信息处理',
-    'TF': '决策模式',
-    'JP': '行动风格'
+    'EI': 'SOCIAL TENDENCY',
+    'SN': 'INFORMATION PROCESSING',
+    'TF': 'DECISION PATTERN',
+    'JP': 'ACTION STYLE'
 };

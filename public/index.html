@@ -54,9 +54,21 @@
                 <h2>罗德岛干员基准心理评估</h2>
             </div>
             <div class="content">
-                <p class="intro">本测试是罗德岛干员标准心理评估流程的一部分。</p>
-                <p class="intro">测试结果将纳入干员人事档案，作为任务分配与团队协作的参考依据。</p>
-                <p class="intro">本测试共12道题，约需5分钟完成。请根据您的第一反应作答。</p>
+                <div class="card">
+                    <h2>// SYSTEM NOTICE</h2>
+                    <p>本系统为罗德岛干员基准心理评估测试。测试结果将纳入干员人事档案，作为任务分配与团队协作的参考依据。请根据自身真实想法作答。</p>
+                </div>
+
+                <div class="card">
+                    <h2>// ASSESSMENT OVERVIEW</h2>
+                    <p>测试包含12道情景选择题，涵盖社交倾向、信息处理、决策模式、行动风格四个维度。评估约需5分钟完成。</p>
+                </div>
+
+                <div class="card">
+                    <h2>// DATA SECURITY</h2>
+                    <p>所有评估数据均受罗德岛信息安全协议保护。未经授权，任何外部人员均无法访问干员心理档案。</p>
+                </div>
+
                 <button id="start-btn" class="btn-primary">开始评估</button>
             </div>
         </div>
@@ -86,10 +98,11 @@
         <div id="result-page" class="page">
             <div class="header">
                 <h1>评估完成</h1>
+                <h2>ASSESSMENT COMPLETE</h2>
             </div>
             <div class="result-container">
                 <div class="result-badge">
-                    <p class="result-label">基准心理类型</p>
+                    <p class="result-label">基准心理类型 / PERSONALITY TYPE</p>
                     <h2 id="personality-code"></h2>
                     <p id="type-title"></p>
                 </div>
@@ -102,7 +115,7 @@
                     <p id="character-quote" class="character-quote"></p>
                 </div>
                 <div class="dimensions">
-                    <h4>特质分析：</h4>
+                    <h4>DIMENSION ANALYSIS</h4>
                     <div class="dimension-list" id="dimension-details"></div>
                 </div>
                 <p class="result-note">本结果已归档至干员心理档案。建议定期复测以监测心理状态变化。</p>

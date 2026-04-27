@@ -244,32 +244,40 @@ function showResult() {
     const dim4 = scores.J > scores.P ? 'J' : 'P';
 
     dimensionDetails.innerHTML = `
-        <div class="dimension-item">
-            <span class="dimension-category">${dimensionCategories['EI']}</span>
-            <span class="dimension-name">${dimensionNames[dim1]}</span>
-            <div class="dimension-bar">
-                <div class="dimension-bar-fill" style="width: ${(Math.max(scores.E, scores.I) / 3 * 100)}%"></div>
+        <div class="progress-demo">
+            <div class="progress-label">
+                <span>${dimensionCategories['EI']}</span>
+                <span>${Math.round(Math.max(scores.E, scores.I) / 3 * 100)}%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${(Math.max(scores.E, scores.I) / 3 * 100)}%"></div>
             </div>
         </div>
-        <div class="dimension-item">
-            <span class="dimension-category">${dimensionCategories['SN']}</span>
-            <span class="dimension-name">${dimensionNames[dim2]}</span>
-            <div class="dimension-bar">
-                <div class="dimension-bar-fill" style="width: ${(Math.max(scores.S, scores.N) / 3 * 100)}%"></div>
+        <div class="progress-demo">
+            <div class="progress-label">
+                <span>${dimensionCategories['SN']}</span>
+                <span>${Math.round(Math.max(scores.S, scores.N) / 3 * 100)}%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${(Math.max(scores.S, scores.N) / 3 * 100)}%"></div>
             </div>
         </div>
-        <div class="dimension-item">
-            <span class="dimension-category">${dimensionCategories['TF']}</span>
-            <span class="dimension-name">${dimensionNames[dim3]}</span>
-            <div class="dimension-bar">
-                <div class="dimension-bar-fill" style="width: ${(Math.max(scores.T, scores.F) / 3 * 100)}%"></div>
+        <div class="progress-demo">
+            <div class="progress-label">
+                <span>${dimensionCategories['TF']}</span>
+                <span>${Math.round(Math.max(scores.T, scores.F) / 3 * 100)}%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${(Math.max(scores.T, scores.F) / 3 * 100)}%"></div>
             </div>
         </div>
-        <div class="dimension-item">
-            <span class="dimension-category">${dimensionCategories['JP']}</span>
-            <span class="dimension-name">${dimensionNames[dim4]}</span>
-            <div class="dimension-bar">
-                <div class="dimension-bar-fill" style="width: ${(Math.max(scores.J, scores.P) / 3 * 100)}%"></div>
+        <div class="progress-demo">
+            <div class="progress-label">
+                <span>${dimensionCategories['JP']}</span>
+                <span>${Math.round(Math.max(scores.J, scores.P) / 3 * 100)}%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${(Math.max(scores.J, scores.P) / 3 * 100)}%"></div>
             </div>
         </div>
     `;
